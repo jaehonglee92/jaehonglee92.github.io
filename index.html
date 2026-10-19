@@ -23,7 +23,8 @@
   body { background: #f4f2ee; color: #1a1a1a; font-family: 'Gowun Batang', serif; -webkit-font-smoothing: antialiased; }
   body:has(dialog[open]) { overflow: hidden; }
   main { max-width: 480px; margin: 0 auto; background: #fff; overflow: hidden; }
-  section { position: relative; padding: 72px 24px; text-align: center; }
+  section { padding: 72px 24px; text-align: center; }
+  main > * { position: relative; }   /* 본문을 배경 별(.sky)보다 위에 그리기 위함 */
   .cover { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
   img { display: block; }
 
@@ -39,15 +40,12 @@
   .sub { margin-top: 6px; font-family: 'Cinzel', 'Gowun Batang', serif; font-weight: 700; font-size: 16px; }
 
   /* 인사말 */
-  .invite { padding-top: 96px; padding-bottom: 136px; }
-  .invite > :not(.sparkle) { position: relative; }
-  /* 장식은 글자와 안 겹치게: 왼쪽은 제목 옆 여백, 오른쪽은 혼주 아래 여백 */
-  .sparkle { position: absolute; width: 20%; max-width: 88px; pointer-events: none; }
-  .sparkle.l { top: 20px; left: 3%; }
-  .sparkle.r { bottom: 16px; right: 4%; }
+  .invite { padding-top: 88px; padding-bottom: 96px; }
   .greeting { margin: 44px 0 40px; font-size: clamp(13px, 3.9vw, 15.5px); line-height: 2.05; letter-spacing: .02em; word-break: keep-all; }
-  .parents { display: inline-grid; grid-template-columns: auto auto auto; gap: 10px 18px; font-size: clamp(14px, 4.1vw, 16px); align-items: baseline; }
-  .parents span:first-child, .parents span:nth-child(4) { text-align: right; }
+  /* 혼주: 한 사람당 한 줄 고정. iOS에서 칸 너비가 좁게 계산돼 두 줄로 깨지던 문제 방지 */
+  .parents { font-size: clamp(13px, 4.1vw, 16px); line-height: 2.1; }
+  .parents .nm, .parents .who { display: inline-block; white-space: nowrap; }   /* 글자를 아주 크게 키운 폰에서만 '이름 / 아들 재홍' 단위로 줄바꿈 */
+  .parents .rel { display: inline-block; width: 4em; text-align: center; }
   .parents b { font-size: 1.05em; }
 
   /* 갤러리 */
@@ -81,9 +79,21 @@
 
   footer { padding: 48px 24px 60px; text-align: center; font-size: 14px; line-height: 1.8; color: #555; }
   footer span { font-family: 'Cinzel', serif; }
+
+  /* 배경 별: 화면에 고정돼 스크롤해도 항상 보이고, 본문 뒤에서 천천히 반짝인다 */
+  .sky { position: fixed; top: 0; bottom: 0; left: 50%; width: 100%; max-width: 480px; transform: translateX(-50%); pointer-events: none; overflow: hidden; }
+  .sky .cl { position: absolute; width: 25%; max-width: 120px; opacity: .55; }
+  .sky .cl.l { top: 3%; left: 2%; aspect-ratio: 232 / 395; }
+  .sky .cl.r { bottom: 3%; right: 2%; aspect-ratio: 245 / 356; }
+  .sky .dust { position: absolute; inset: 0; opacity: .9; }
+  .sky i { position: absolute; background: url(img/stars.png) no-repeat; animation: twinkle 5s ease-in-out infinite alternate; will-change: opacity, transform; }
+  .sky .dot { border-radius: 50%; background: radial-gradient(circle, #9ea5af 0 28%, rgba(176,182,191,.55) 48%, rgba(176,182,191,0) 72%); }
+  @keyframes twinkle { from { opacity: .12; transform: scale(.8); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .sky i { animation: none; opacity: .5; } }
 </style>
 </head>
 <body>
+<div class="sky" aria-hidden="true"><div class="cl l"></div><div class="cl r"></div><div class="dust"></div></div>
 <main>
 
   <section class="cover">
@@ -95,8 +105,6 @@
   </section>
 
   <section class="invite">
-    <img class="sparkle l" src="img/sparkle-l.png" alt="">
-    <img class="sparkle r" src="img/sparkle-r.png" alt="">
     <h2>SAVE THE DATE</h2>
     <p class="sub">2027.04.11 일요일 오전 11시</p>
     <p class="greeting">
@@ -111,8 +119,8 @@
       귀한 걸음으로 함께해 주세요.
     </p>
     <div class="parents">
-      <span>이영섭 · 안미정의</span><span>아들</span><b>재홍</b>
-      <span>이진주 · 손희정의</span><span>딸</span><b>지나</b>
+      <p><span class="nm">이영섭 · 안미정의</span><span class="who"><span class="rel">아들</span><b>재홍</b></span></p>
+      <p><span class="nm">이진주 · 손희정의</span><span class="who"><span class="rel">딸</span><b>지나</b></span></p>
     </div>
   </section>
 
@@ -158,6 +166,55 @@
 </dialog>
 
 <script>
+  // ── 배경 별 ──
+  // 시안의 별자리 두 개를 별 하나씩 잘라 은색으로 칠한 스프라이트(img/stars.png)에서 떼어 붙인다.
+  // [원본 가로, 세로, [[x, y, w, h, 스프라이트 x], ...]]  (sparkle-l / sparkle-r 기준 좌표)
+  const SPRITE = [1164, 99];
+  const CLUSTERS = [
+    [232,395,[[86,1,90,98,0],[39,73,19,19,102],[165,71,57,59,133],[80,113,27,29,202],[35,162,19,20,241],[200,164,8,8,272],[133,174,8,8,292],[174,198,19,20,312],[31,218,9,8,343],[213,248,19,21,364],[0,257,19,20,395],[10,257,91,95,426],[137,281,19,19,529],[145,344,19,20,560],[104,351,19,20,591],[155,376,19,19,622]]],
+    [245,356,[[0,0,20,21,653],[29,16,55,59,685],[116,40,20,20,752],[81,70,20,20,784],[179,105,20,21,816],[213,139,8,8,848],[100,148,20,20,868],[162,155,20,20,900],[154,161,91,99,932],[16,190,29,33,1035],[105,244,56,61,1076],[74,336,20,20,1144]]],
+  ];
+  const rand = (a, b) => a + Math.random() * (b - a);
+  function star(box, x, y, w, h, sx, W, H, slow) {
+    const el = document.createElement('i');
+    const [SW, SH] = SPRITE;
+    Object.assign(el.style, {
+      left: x / W * 100 + '%', top: y / H * 100 + '%', width: w / W * 100 + '%', height: h / H * 100 + '%',
+      backgroundSize: `${SW / w * 100}% ${SH / h * 100}%`,
+      backgroundPosition: `${sx / (SW - w) * 100}% 0`,
+      animationDuration: rand(slow ? 4 : 2.5, slow ? 7 : 5) + 's',
+      animationDelay: -rand(0, 7) + 's',   // 음수 지연: 처음부터 제각각 다른 박자로
+    });
+    box.append(el);
+  }
+  document.querySelectorAll('.sky .cl').forEach((box, c) => {
+    const [W, H, stars] = CLUSTERS[c];
+    for (const [x, y, w, h, sx] of stars) star(box, x, y, w, h, sx, W, H, w > 40);
+  });
+  // 은색 별가루: 대부분 화면 양옆에, 가운데(본문 자리)는 드물게
+  const dust = document.querySelector('.sky .dust');
+  for (let k = 0; k < 46; k++) {
+    const el = document.createElement('i');
+    const side = Math.random() < .72;
+    const s = rand(2, 4.5);
+    el.className = 'dot';
+    Object.assign(el.style, {
+      left: (side ? (Math.random() < .5 ? rand(1, 20) : rand(78, 98)) : rand(20, 78)) + '%',
+      top: rand(1, 98) + '%', width: s + 'px', height: s + 'px',
+      animationDuration: rand(2, 5) + 's', animationDelay: -rand(0, 5) + 's',
+    });
+    dust.append(el);
+  }
+  // 작은 은빛 십자 별 몇 개 (스프라이트의 작은 별 모양 재사용)
+  for (let k = 0; k < 9; k++) {
+    const sz = rand(7, 12), wrap = document.createElement('div');
+    Object.assign(wrap.style, { position: 'absolute', width: sz + 'px', height: sz + 'px',
+      left: (Math.random() < .5 ? rand(2, 18) : rand(80, 96)) + '%', top: rand(8, 92) + '%' });
+    star(wrap, 0, 0, 19, 19, 102, 19, 19, false);
+    dust.append(wrap);
+  }
+
+  // ── 갤러리 ──
   const lb = document.getElementById('lb'), track = document.getElementById('track'), count = document.getElementById('count');
   const prev = lb.querySelector('.prev'), next = lb.querySelector('.next');
   const thumbs = [...document.querySelectorAll('#grid img')];
