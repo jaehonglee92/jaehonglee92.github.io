@@ -3,65 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<meta name="robots" content="noindex, nofollow">
 <title>재홍 ♥ 지나 결혼합니다</title>
+<meta name="description" content="2027.04.11 일요일 오전 11:00 · 삼성전자 서초사옥 웨딩홀">
+<meta property="og:type" content="website">
 <meta property="og:title" content="재홍 ♥ 지나 결혼합니다">
 <meta property="og:description" content="2027.04.11 일요일 오전 11:00 · 삼성전자 서초사옥 웨딩홀">
-<meta property="og:image" content="https://jaehonglee92.github.io/couple.png">
+<meta property="og:image" content="https://jaehonglee92.github.io/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:url" content="https://jaehonglee92.github.io/">
-<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Cormorant+Garamond:wght@500&family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Gowun+Batang:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #f4f2ee; color: #222; font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; }
-  main { max-width: 480px; margin: 0 auto; background: #fff; box-shadow: 0 0 24px rgba(0,0,0,.06); }
-  section { padding: 72px 28px; text-align: center; }
-  section + section { border-top: 1px solid #eee; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { background: #f4f2ee; color: #1a1a1a; font-family: 'Gowun Batang', serif; -webkit-font-smoothing: antialiased; }
+  body:has(dialog[open]) { overflow: hidden; }
+  main { max-width: 480px; margin: 0 auto; background: #fff; overflow: hidden; }
+  section { position: relative; padding: 72px 24px; text-align: center; }
+  .cover { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+  img { display: block; }
 
-  .script { font-family: 'Parisienne', cursive; font-size: 30px; color: #444; }
-  .names { font-family: 'Cormorant Garamond', serif; font-size: 28px; letter-spacing: .05em; margin-top: 8px; white-space: nowrap; }
-  .names small { font-size: 19px; text-transform: uppercase; letter-spacing: .1em; }
-  .couple { width: 78%; max-width: 320px; display: block; margin: 44px auto 56px; }
-  .date { font-family: 'Nanum Myeongjo', serif; font-size: 20px; letter-spacing: .04em; }
-  .place { margin-top: 10px; font-size: 14px; color: #555; letter-spacing: .06em; }
+  /* 표지 */
+  .script { font-family: 'Sacramento', cursive; font-size: 34px; letter-spacing: .03em; }
+  .names { font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(22px, 7.6vw, 30px); letter-spacing: .02em; margin-top: 4px; }
+  .couple { width: 56%; max-width: 250px; height: auto; margin: 52px auto 60px; }
+  .date { font-family: 'Cinzel', 'Gowun Batang', serif; font-size: 19px; letter-spacing: .02em; }
+  .place { margin-top: 8px; font-size: 15px; font-weight: 700; letter-spacing: .04em; }
 
-  h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; letter-spacing: .12em; font-weight: 500; }
-  .sub { margin-top: 8px; font-weight: 500; font-size: 15px; }
-  .greeting { margin: 56px 0; font-size: 15px; line-height: 2; color: #444; word-break: keep-all; }
-  .greeting .fun { background: #fbd9d3; padding: 0 4px; }
-  .parents { display: inline-grid; grid-template-columns: auto auto auto; gap: 14px 12px; font-size: 15px; text-align: left; align-items: baseline; }
-  .parents b { font-size: 16px; }
-  .parents span:nth-child(3n+2) { color: #666; padding-left: 6px; }
+  /* 공통 제목 */
+  h2 { font-family: 'Cinzel', serif; font-weight: 700; font-size: 22px; letter-spacing: .03em; }
+  .sub { margin-top: 6px; font-family: 'Cinzel', 'Gowun Batang', serif; font-weight: 700; font-size: 16px; }
 
-  .venue { margin-top: 14px; font-weight: 700; font-size: 17px; }
-  .addr { margin-top: 6px; font-family: 'Nanum Myeongjo', serif; font-size: 13px; color: #444; }
-  .map { width: 100%; display: block; margin: 28px 0 8px; border: 1px solid #eee; }
-  .btns { display: flex; gap: 8px; justify-content: center; margin: 16px 0 44px; }
-  .btns a, .btns button { flex: 1; max-width: 130px; padding: 10px 0; font: 500 13px 'Noto Sans KR', sans-serif; color: #222; background: #f4f2ee; border: 0; border-radius: 6px; text-decoration: none; cursor: pointer; }
+  /* 인사말 */
+  .invite { padding-top: 96px; padding-bottom: 136px; }
+  .invite > :not(.sparkle) { position: relative; }
+  /* 장식은 글자와 안 겹치게: 왼쪽은 제목 옆 여백, 오른쪽은 혼주 아래 여백 */
+  .sparkle { position: absolute; width: 20%; max-width: 88px; pointer-events: none; }
+  .sparkle.l { top: 20px; left: 3%; }
+  .sparkle.r { bottom: 16px; right: 4%; }
+  .greeting { margin: 44px 0 40px; font-size: clamp(13px, 3.9vw, 15.5px); line-height: 2.05; letter-spacing: .02em; word-break: keep-all; }
+  .parents { display: inline-grid; grid-template-columns: auto auto auto; gap: 10px 18px; font-size: clamp(14px, 4.1vw, 16px); align-items: baseline; }
+  .parents span:first-child, .parents span:nth-child(4) { text-align: right; }
+  .parents b { font-size: 1.05em; }
+
+  /* 갤러리 */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 32px; }
+  .grid button { border: 0; padding: 0; background: #eee; cursor: zoom-in; aspect-ratio: 3 / 4; overflow: hidden; }
+  .grid img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+  .grid button:hover img { transform: scale(1.04); }
+
+  /* 라이트박스 */
+  #lb { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #000; color: #fff; overflow: hidden; }
+  #lb::backdrop { background: #000; }
+  #lb .track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior: contain; scrollbar-width: none; }
+  #lb .track::-webkit-scrollbar { display: none; }
+  #lb .track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; scroll-snap-align: center; scroll-snap-stop: always; background: center / contain no-repeat; }
+  #lb button { position: absolute; border: 0; background: rgba(0,0,0,.35); color: #fff; font: 28px/1 sans-serif; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; }
+  #lb .close { top: 12px; right: 12px; font-size: 24px; }
+  #lb .prev, #lb .next { top: 50%; transform: translateY(-50%); }
+  #lb .prev { left: 8px; }
+  #lb .next { right: 8px; }
+  #lb .count { position: absolute; top: 24px; left: 0; right: 0; text-align: center; font: 14px 'Cinzel', serif; letter-spacing: .1em; pointer-events: none; }
+
+  /* 오시는 길 */
+  .venue { margin-top: 10px; font-weight: 700; font-size: 17px; }
+  .addr { margin-top: 6px; font-size: 13.5px; }
+  .map { width: 100%; height: auto; margin: 28px 0 10px; }
+  .btns { display: flex; gap: 8px; justify-content: center; margin: 14px 0 44px; }
+  .btns a, .btns button { flex: 1; max-width: 130px; padding: 10px 0; font: 700 13px 'Gowun Batang', serif; color: #1a1a1a; background: #f4f2ee; border: 0; border-radius: 6px; text-decoration: none; cursor: pointer; }
   .ways { text-align: left; display: grid; gap: 22px; }
-  .ways h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .ways p { font-size: 13.5px; line-height: 1.7; color: #444; }
+  .ways h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .ways p { font-size: 13.5px; line-height: 1.75; }
 
-  footer { padding: 48px 28px 56px; text-align: center; font-family: 'Nanum Myeongjo', serif; color: #777; font-size: 14px; line-height: 1.8; }
+  footer { padding: 48px 24px 60px; text-align: center; font-size: 14px; line-height: 1.8; color: #555; }
+  footer span { font-family: 'Cinzel', serif; }
 </style>
 </head>
 <body>
 <main>
 
-  <section>
+  <section class="cover">
     <p class="script">The wedding of</p>
-    <p class="names">JAEHONG <small>and</small> JINA</p>
-    <img class="couple" src="couple.png" alt="신랑 신부">
+    <h1 class="names">JAEHONG and JINA</h1>
+    <picture><source srcset="img/couple.webp" type="image/webp"><img class="couple" src="img/couple.png" width="487" height="527" alt="신랑 신부 인형"></picture>
     <p class="date">2027.04.11 일요일 오전 11:00</p>
     <p class="place">삼성전자 서초사옥 웨딩홀</p>
   </section>
 
-  <section>
+  <section class="invite">
+    <img class="sparkle l" src="img/sparkle-l.png" alt="">
+    <img class="sparkle r" src="img/sparkle-r.png" alt="">
     <h2>SAVE THE DATE</h2>
     <p class="sub">2027.04.11 일요일 오전 11시</p>
     <p class="greeting">
-      사랑과 신뢰로 한 걸음 한 걸음 서로의 인생에 다가선
-      두 사람이 하나가 되어 새로운 시작을 하려 합니다.
-      귀한 걸음으로 오셔서 축복해 주시고 함께해 주세요.<br>
-      <span class="fun">와서 맛난거 많이드세용 냠냠</span>
+      저희 두 사람,<br>
+      꽃향기 가득한 4월의 봄바람을 타고<br>
+      부부로서 함께하는 여행을 시작하려 합니다.<br>
+      한 치 앞도 알 수 없는 삶의 여정에서도<br>
+      시간과 공간을 넘어 서로를 알아보게 하는<br>
+      유일한 힘, 사랑으로<br>
+      한 걸음씩 함께 나아가겠습니다.<br>
+      저희의 첫걸음에<br>
+      귀한 걸음으로 함께해 주세요.
     </p>
     <div class="parents">
       <span>이영섭 · 안미정의</span><span>아들</span><b>재홍</b>
@@ -69,15 +116,27 @@
     </div>
   </section>
 
-  <section>
+  <section class="gallery">
+    <h2>GALLERY</h2>
+    <div class="grid" id="grid">
+      <button type="button" aria-label="사진 1 크게 보기"><img src="gallery/01_t.jpg" alt="웨딩 사진 1" loading="lazy" decoding="async"></button>
+      <button type="button" aria-label="사진 2 크게 보기"><img src="gallery/02_t.jpg" alt="웨딩 사진 2" loading="lazy" decoding="async"></button>
+      <button type="button" aria-label="사진 3 크게 보기"><img src="gallery/03_t.jpg" alt="웨딩 사진 3" loading="lazy" decoding="async"></button>
+      <button type="button" aria-label="사진 4 크게 보기"><img src="gallery/04_t.jpg" alt="웨딩 사진 4" loading="lazy" decoding="async"></button>
+      <button type="button" aria-label="사진 5 크게 보기"><img src="gallery/05_t.jpg" alt="웨딩 사진 5" loading="lazy" decoding="async"></button>
+      <button type="button" aria-label="사진 6 크게 보기"><img src="gallery/06_t.jpg" alt="웨딩 사진 6" loading="lazy" decoding="async"></button>
+    </div>
+  </section>
+
+  <section class="location">
     <h2>MAP</h2>
     <p class="venue">삼성전자 서초사옥 웨딩홀</p>
     <p class="addr" id="addr">서울 서초구 서초대로74길 11 삼성전자빌딩 5F 다목적홀</p>
-    <img class="map" src="map.png" alt="삼성전자 서초사옥 약도">
+    <img class="map" src="img/map.png" width="1101" height="729" alt="삼성전자 서초사옥 약도: 강남역과 교대역 사이, 건물 외부 투명 엘리베이터로 5층">
     <div class="btns">
-      <a href="https://map.naver.com/p/search/삼성전자%20서초사옥" target="_blank" rel="noopener">네이버 지도</a>
-      <a href="https://map.kakao.com/link/search/삼성전자%20서초사옥" target="_blank" rel="noopener">카카오맵</a>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('addr').textContent).then(()=>alert('주소가 복사되었습니다.'))">주소 복사</button>
+      <a href="https://map.naver.com/p/search/%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90%20%EC%84%9C%EC%B4%88%EC%82%AC%EC%98%A5" target="_blank" rel="noopener">네이버 지도</a>
+      <a href="https://map.kakao.com/link/search/%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90%20%EC%84%9C%EC%B4%88%EC%82%AC%EC%98%A5" target="_blank" rel="noopener">카카오맵</a>
+      <button type="button" id="copy">주소 복사</button>
     </div>
     <div class="ways">
       <div><h3>자가용 이용 시</h3><p>건물 지하 6,7층 주차장 3시간 무료 이용<br>지하주차장에서 5층 연결 엘리베이터 탑승</p></div>
@@ -86,8 +145,78 @@
     </div>
   </section>
 
-  <footer>재홍 &amp; 지나<br>2027.04.11</footer>
+  <footer>재홍 &amp; 지나<br><span>2027.04.11</span></footer>
 
 </main>
+
+<dialog id="lb" aria-label="사진 크게 보기">
+  <div class="track" id="track"></div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <button type="button" class="prev" aria-label="이전 사진">‹</button>
+  <button type="button" class="next" aria-label="다음 사진">›</button>
+  <button type="button" class="close" aria-label="닫기" autofocus>✕</button>
+</dialog>
+
+<script>
+  const lb = document.getElementById('lb'), track = document.getElementById('track'), count = document.getElementById('count');
+  const prev = lb.querySelector('.prev'), next = lb.querySelector('.next');
+  const thumbs = [...document.querySelectorAll('#grid img')];
+
+  // 원본은 썸네일 파일명에서 _t 만 뺀 것. 처음 열 때 한 번만 만든다.
+  function build() {
+    if (track.children.length) return;
+    for (const t of thumbs) {
+      const img = new Image();
+      img.alt = t.alt;
+      img.style.backgroundImage = `url(${t.src})`;   // 원본이 뜨기 전까지 썸네일을 대신 보여줌
+      img.src = t.src.replace('_t.jpg', '.jpg');
+      track.append(img);
+    }
+  }
+  let cur = 0;
+  function update() {
+    cur = Math.round(track.scrollLeft / track.clientWidth);
+    const label = `${cur + 1} / ${thumbs.length}`;
+    if (count.textContent !== label) count.textContent = label;   // 바뀔 때만 써야 화면낭독기가 반복해서 읽지 않음
+    prev.hidden = cur === 0;
+    next.hidden = cur === thumbs.length - 1;
+    if (document.activeElement.hidden) (cur === 0 ? next : prev).focus();   // 누르던 버튼이 사라지면 반대쪽 버튼으로
+  }
+
+  // 폰의 뒤로가기 버튼을 누르면 페이지를 떠나지 않고 사진만 닫히게 한다.
+  let pushed = false;
+  if (history.state?.lb) history.back();   // 사진을 연 채 새로고침된 경우 남은 기록 정리
+  function open(i) {
+    build();
+    lb.showModal();
+    track.scrollLeft = i * track.clientWidth;
+    update();
+    history.pushState({ lb: 1 }, '');
+    pushed = true;
+  }
+  lb.addEventListener('close', () => { if (pushed) { pushed = false; history.back(); } });
+  addEventListener('popstate', () => {
+    if (lb.open) { pushed = false; lb.close(); }
+    else if (history.state?.lb) history.back();   // 앞으로가기로 남은 기록에 들어온 경우
+  });
+
+  const go = d => track.scrollTo({ left: (cur + d) * track.clientWidth, behavior: 'smooth' });
+  thumbs.forEach((t, i) => t.parentElement.addEventListener('click', () => open(i)));
+  track.addEventListener('scroll', update, { passive: true });
+  prev.onclick = () => go(-1);
+  next.onclick = () => go(1);
+  lb.querySelector('.close').onclick = () => lb.close();
+  addEventListener('keydown', e => {
+    const d = { ArrowLeft: -1, ArrowRight: 1 }[e.key];
+    if (lb.open && d) { e.preventDefault(); go(d); }
+  });
+  addEventListener('resize', () => { if (lb.open) track.scrollLeft = cur * track.clientWidth; });   // 화면 회전 시 보던 사진 유지
+
+  document.getElementById('copy').onclick = () => {
+    const addr = document.getElementById('addr').textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(addr) : Promise.reject())
+      .then(() => alert('주소가 복사되었습니다.'), () => prompt('아래 주소를 길게 눌러 복사하세요.', addr));
+  };
+</script>
 </body>
 </html>
