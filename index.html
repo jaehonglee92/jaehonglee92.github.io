@@ -91,9 +91,22 @@
   .sky .dot { border-radius: 50%; background: radial-gradient(circle, #9ea5af 0 28%, rgba(176,182,191,.55) 48%, rgba(176,182,191,0) 72%); }
   @keyframes twinkle { from { opacity: .12; transform: scale(.8); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .sky i { animation: none; opacity: .5; } }
+
+  /* 봉투 인트로: 누르면 리본이 풀리고 봉투가 열린 뒤 서서히 사라진다 */
+  #intro { position: fixed; inset: 0; z-index: 10; background: #fff; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; transition: opacity 1s ease; }
+  #intro video { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+  #intro .hint { position: absolute; left: 0; right: 0; bottom: max(40px, env(safe-area-inset-bottom)); text-align: center; font-size: 14px; letter-spacing: .14em; color: #8d929a; animation: hint 2.4s ease-in-out infinite; }
+  @keyframes hint { 50% { opacity: .3; } }
+  #intro.playing .hint { opacity: 0; animation: none; transition: opacity .3s; }
+  #intro.done { opacity: 0; pointer-events: none; }
+  body:has(#intro) { overflow: hidden; }
 </style>
 </head>
 <body>
+<div id="intro" role="button" tabindex="0" aria-label="청첩장 열기">
+  <video src="img/intro.mp4" poster="img/intro.jpg" muted playsinline preload="auto" disablepictureinpicture></video>
+  <p class="hint">터치하여 열어주세요</p>
+</div>
 <div class="sky" aria-hidden="true"><div class="cl l"></div><div class="cl r"></div><div class="dust"></div></div>
 <main>
 
@@ -171,6 +184,28 @@
 </dialog>
 
 <script>
+  // ── 봉투 인트로 ── 누르면 재생, 재생 중 한 번 더 누르면 건너뛰기, 재생이 안 되면 바로 본문
+  const intro = document.getElementById('intro');
+  if (intro) {
+    const v = intro.querySelector('video');
+    const finish = () => {
+      if (intro.classList.contains('done')) return;
+      intro.classList.add('done');
+      setTimeout(() => intro.remove(), 1000);
+    };
+    const start = () => {
+      if (intro.classList.contains('playing')) return finish();
+      intro.classList.add('playing');
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
+      v.play().catch(finish);
+    };
+    intro.addEventListener('click', start);
+    intro.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); start(); } });
+    v.addEventListener('timeupdate', () => { if (v.duration && v.currentTime > v.duration - 1) finish(); });   // 끝나기 1초 전부터 사라지기 시작
+    v.addEventListener('ended', finish);
+    v.addEventListener('error', () => { if (intro.classList.contains('playing')) finish(); });
+  }
+
   // ── 배경 별 ──
   // 시안의 별자리 두 개를 별 하나씩 잘라 은색으로 칠한 스프라이트(img/stars.png)에서 떼어 붙인다.
   // [원본 가로, 세로, [[x, y, w, h, 스프라이트 x], ...]]  (sparkle-l / sparkle-r 기준 좌표)
