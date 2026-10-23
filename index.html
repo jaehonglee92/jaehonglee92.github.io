@@ -78,6 +78,35 @@
   .ways h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
   .ways p { font-size: 13.5px; line-height: 1.75; }
 
+  /* 연락하기 */
+  .people { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
+  .side { padding: 20px 8px 18px; background: #f8f7f4; border-radius: 10px; }
+  .side h3 { font-size: 13px; font-weight: 400; letter-spacing: .12em; color: #8a8a8a; }
+  .side p { margin: 8px 0 14px; font-size: 16px; }
+  .side p span { font-size: 13px; color: #777; margin-right: 4px; }
+  .call { display: flex; gap: 6px; justify-content: center; }
+  .call a { flex: 1; max-width: 64px; padding: 8px 0; border: 1px solid #ddd8ce; border-radius: 999px; background: #fff; font: 700 13px 'Gowun Batang', serif; color: #1a1a1a; text-decoration: none; }
+
+  /* D-DAY */
+  .timer { display: flex; justify-content: center; gap: 8px; margin-top: 28px; }
+  .timer div { flex: 1; max-width: 72px; padding: 12px 0 10px; background: #f8f7f4; border-radius: 8px; }
+  .timer b { display: block; font: 700 26px/1.15 'Cinzel', serif; }
+  .timer span { display: block; margin-top: 4px; font: 12px 'Cinzel', serif; letter-spacing: .06em; color: #7a7a7a; }
+  .dleft { margin-top: 22px; font-size: 15px; word-break: keep-all; }
+
+  /* 마음 전하실 곳 */
+  .account .note { margin: 26px 0 24px; font-size: 14px; line-height: 2; color: #555; word-break: keep-all; }
+  .account details { margin-top: 10px; border: 1px solid #e6e2da; border-radius: 10px; background: #fff; text-align: left; overflow: hidden; }
+  .account summary { position: relative; padding: 14px 44px 14px 18px; font-size: 15px; cursor: pointer; list-style: none; }
+  .account summary::-webkit-details-marker { display: none; }
+  .account summary::after { content: ''; position: absolute; right: 20px; top: 50%; width: 7px; height: 7px; margin-top: -6px; border-right: 1.5px solid #999; border-bottom: 1.5px solid #999; transform: rotate(45deg); transition: transform .2s; }
+  .account details[open] summary::after { margin-top: -2px; transform: rotate(225deg); }
+  .acc { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-top: 1px solid #eee; }
+  .acc p { font-size: 14.5px; line-height: 1.6; }
+  .acc small { font-size: 12.5px; color: #888; }
+  .acc span { white-space: nowrap; }   /* 계좌번호가 숫자 중간에서 끊기지 않게 */
+  .acc button { flex: none; padding: 8px 14px; border: 0; border-radius: 6px; background: #f4f2ee; font: 700 12.5px 'Gowun Batang', serif; color: #1a1a1a; cursor: pointer; }
+
   footer { padding: 48px 24px 60px; text-align: center; font-size: 14px; line-height: 1.8; color: #555; }
   footer span { font-family: 'Cinzel', serif; }
 
@@ -138,6 +167,34 @@
     </div>
   </section>
 
+  <section class="contact">
+    <h2>CONTACT</h2>
+    <p class="sub">연락하기</p>
+    <div class="people">
+      <div class="side">
+        <h3>신랑측</h3>
+        <p><span>신랑</span>이재홍</p>
+        <div class="call"><a href="tel:01099259614" aria-label="신랑 이재홍에게 전화">전화</a><a href="sms:01099259614" aria-label="신랑 이재홍에게 문자">문자</a></div>
+      </div>
+      <div class="side">
+        <h3>신부측</h3>
+        <p><span>신부</span>이지나</p>
+        <div class="call"><a href="tel:01073745935" aria-label="신부 이지나에게 전화">전화</a><a href="sms:01073745935" aria-label="신부 이지나에게 문자">문자</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dday">
+    <h2>D-DAY</h2>
+    <div class="timer" role="timer" aria-label="결혼식까지 남은 시간">
+      <div><b>0</b><span>Days</span></div>
+      <div><b>00</b><span>Hours</span></div>
+      <div><b>00</b><span>Min</span></div>
+      <div><b>00</b><span>Sec</span></div>
+    </div>
+    <p class="dleft" id="dleft"></p>
+  </section>
+
   <section class="gallery">
     <h2>GALLERY</h2>
     <div class="grid" id="grid">
@@ -169,6 +226,20 @@
       <div><h3>버스 이용 시</h3><p>강남역 5번출구 정류장 하차 후 도보 6분<br>9200, 9300, 9404, 140, 340, 서초03</p></div>
       <div><h3>지하철 이용 시</h3><p>2호선/신분당선 강남역 8번 출구<br>지하 연결 통로 이용</p></div>
     </div>
+  </section>
+
+  <section class="account">
+    <h2>WITH GRATITUDE</h2>
+    <p class="sub">마음 전하실 곳</p>
+    <p class="note">참석이 어려우신 분들을 위해<br>조심스럽게 계좌번호를 적어 두었습니다.<br>너그러운 마음으로 양해 부탁드립니다.</p>
+    <details>
+      <summary>신랑측 계좌번호</summary>
+      <div class="acc"><p><small>신랑 이재홍</small><br><span>신한은행</span> <span>110-337-445799</span></p><button type="button" data-copy="신한은행 110-337-445799">복사</button></div>
+    </details>
+    <details>
+      <summary>신부측 계좌번호</summary>
+      <div class="acc"><p><small>신부 이지나</small><br><span>SC제일은행</span> <span>573-20-227350</span></p><button type="button" data-copy="SC제일은행 573-20-227350">복사</button></div>
+    </details>
   </section>
 
   <footer>재홍 &amp; 지나<br><span>2027.04.11</span></footer>
@@ -309,11 +380,28 @@
   });
   addEventListener('resize', () => { if (lb.open) track.scrollLeft = cur * track.clientWidth; });   // 화면 회전 시 보던 사진 유지
 
-  document.getElementById('copy').onclick = () => {
-    const addr = document.getElementById('addr').textContent;
-    (navigator.clipboard ? navigator.clipboard.writeText(addr) : Promise.reject())
-      .then(() => alert('주소가 복사되었습니다.'), () => prompt('아래 주소를 길게 눌러 복사하세요.', addr));
-  };
+  // ── 복사 (주소, 계좌번호) ──
+  const copyText = (text, msg) => (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+    .then(() => alert(msg), () => prompt('아래 내용을 길게 눌러 복사하세요.', text));
+  document.getElementById('copy').onclick = () => copyText(document.getElementById('addr').textContent, '주소가 복사되었습니다.');
+  document.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copyText(b.dataset.copy, '계좌번호가 복사되었습니다.'));
+
+  // ── D-DAY ── 한국 시간 2027-04-11 11:00 기준 (하객 폰의 시간대와 무관)
+  const WEDDING = Date.parse('2027-04-11T11:00:00+09:00');
+  const cells = [...document.querySelectorAll('.timer b')], dleft = document.getElementById('dleft');
+  const kstDay = t => Math.floor((t + 9 * 3600e3) / 86400e3);        // 한국 날짜 기준 일수
+  function tick() {
+    const now = Date.now(), s = Math.max(0, Math.floor((WEDDING - now) / 1000));
+    [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60].forEach((n, i) => {
+      const t = i ? String(n).padStart(2, '0') : String(n);
+      if (cells[i].textContent !== t) cells[i].textContent = t;
+    });
+    const d = kstDay(WEDDING) - kstDay(now);
+    const msg = d > 0 ? `재홍 ♥ 지나의 결혼식이 <b>${d}</b>일 남았습니다.` : d === 0 ? '오늘은 재홍 ♥ 지나의 결혼식 날입니다.' : '함께해 주셔서 감사합니다.';
+    if (dleft.innerHTML !== msg) dleft.innerHTML = msg;
+    setTimeout(tick, 1000 - now % 1000 + 10);                          // 매 초 경계에 맞춰 갱신
+  }
+  tick();
 </script>
 </body>
 </html>
