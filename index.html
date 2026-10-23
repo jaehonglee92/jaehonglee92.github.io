@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Gowun+Batang:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -123,6 +124,12 @@
   @keyframes twinkle { from { opacity: .12; transform: scale(.8); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .sky i { animation: none; opacity: .5; } }
 
+  /* 스크롤 따라 서서히 나타나고 사라지기 */
+  .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .9s ease, transform .9s ease; }
+  .js .reveal.in { opacity: 1; transform: none; transition-delay: var(--d, 0s); }
+  .greeting span, .cover picture { display: block; }
+  @media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; transform: none; transition: none; } }
+
   /* 봉투 인트로: 누르면 리본이 풀리고 봉투가 열린 뒤 서서히 사라진다 */
   #intro { position: fixed; inset: 0; z-index: 10; background: #efe6d7 url(img/paper.jpg) 0 0 / 300px 300px; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; transition: opacity 1s ease; }
   #intro video { width: 100%; height: 100%; object-fit: contain; pointer-events: none; mix-blend-mode: multiply; }   /* 영상의 흰 바탕이 베이지 배경에 녹아들게 */
@@ -155,15 +162,15 @@
     <h2>SAVE THE DATE</h2>
     <p class="sub">2027.04.11 일요일 오전 11시</p>
     <p class="greeting">
-      저희 두 사람,<br>
-      꽃향기 가득한 4월의 봄바람을 타고<br>
-      부부로서 함께하는 여행을 시작하려 합니다.<br>
-      한 치 앞도 알 수 없는 삶의 여정에서도<br>
-      시간과 공간을 넘어 서로를 알아보게 하는<br>
-      유일한 힘, 사랑으로<br>
-      한 걸음씩 함께 나아가겠습니다.<br>
-      저희의 첫걸음에<br>
-      귀한 걸음으로 함께해 주세요.
+      <span>저희 두 사람,</span>
+      <span>꽃향기 가득한 4월의 봄바람을 타고</span>
+      <span>부부로서 함께하는 여행을 시작하려 합니다.</span>
+      <span>한 치 앞도 알 수 없는 삶의 여정에서도</span>
+      <span>시간과 공간을 넘어 서로를 알아보게 하는</span>
+      <span>유일한 힘, 사랑으로</span>
+      <span>한 걸음씩 함께 나아가겠습니다.</span>
+      <span>저희의 첫걸음에</span>
+      <span>귀한 걸음으로 함께해 주세요.</span>
     </p>
     <div class="parents">
       <p><span class="nm">이영섭 · 안미정의</span><span class="who"><span class="rel">아들</span><b>재홍</b></span></p>
@@ -287,6 +294,17 @@
     v.addEventListener('ended', finish);
     v.addEventListener('error', () => { if (intro.classList.contains('playing')) finish(); });
   }
+
+  // ── 스크롤 효과 ── 화면 안(위아래 6% 여백 제외)에 들어오면 나타나고, 벗어나면 사라진다
+  const groups = '.greeting, .parents, .grid, .people, .timer, .ways';          // 이 묶음들은 한 줄/한 칸씩 차례로
+  const targets = [];
+  document.querySelectorAll('main section > *, main > footer').forEach(el => {
+    const items = el.matches(groups) ? [...el.children] : [el];
+    items.forEach((it, k) => { it.classList.add('reveal'); it.style.setProperty('--d', Math.min(k, 8) * 0.08 + 's'); targets.push(it); });
+  });
+  const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('in', e.isIntersecting)),
+                                      { rootMargin: '-6% 0px -6% 0px' });
+  targets.forEach(t => io.observe(t));
 
   // ── 배경 별 ──
   // 시안의 별자리 두 개를 별 하나씩 잘라 은색으로 칠한 스프라이트(img/stars.png)에서 떼어 붙인다.
