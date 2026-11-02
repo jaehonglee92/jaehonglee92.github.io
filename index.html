@@ -22,9 +22,9 @@
   document.documentElement.classList.add('js');
   // 인트로 동안 표지를 숨겨 둔다 ('동작 줄이기' 설정이면 인트로 없이 바로 표지)
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.classList.add('intro-active', 'intro-hold');
+    document.documentElement.classList.add('intro-active', 'intro-hold', 'intro-hold-couple');
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';   // 새로고침해도 표지부터
-    setTimeout(() => { document.documentElement.classList.remove('intro-active', 'intro-hold'); document.getElementById('intro')?.remove(); }, 9000);   // 만일을 위한 안전장치
+    setTimeout(() => { document.documentElement.classList.remove('intro-active', 'intro-hold', 'intro-hold-couple'); document.getElementById('intro')?.remove(); }, 9000);   // 만일을 위한 안전장치
   }
 </script>
 <style>
@@ -172,24 +172,29 @@
   .greeting span, .cover picture { display: block; }
   @media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; transform: none; transition: none; } }
 
-  /* Save the Date 픽셀 아트 인트로: 8비트 하트 + 타자 치듯 찍히는 SAVE THE DATE와 날짜
-     → 날짜가 모자이크에서 점점 선명해져 표지 서체가 되고 → 표지 날짜 자리로 내려가 그대로 표지 날짜가 된다 */
-  .intro-active .cover > :not(.date) { opacity: 0 !important; transform: translateY(18px) !important; }
+  /* Save the Date + 픽셀 신랑신부 인트로: 표지와 같은 배치로 시작해, 픽셀들이 제자리에서 진짜 표지로 바뀐다
+     (픽셀 인형 → 인형 사진, SAVE THE DATE → 이름, 픽셀 날짜 → 크게 선명해진 뒤 날짜 줄로) */
+  .intro-active .cover > :not(.date):not(picture) { opacity: 0 !important; transform: translateY(18px) !important; }
   .intro-active .cover .date .d2 { opacity: 0; }
   .cover .date .d2 { transition: opacity .9s ease .25s; }
   .intro-hold .cover .date .d1 { opacity: 0; }
+  .intro-hold-couple .cover picture { opacity: 0 !important; }
   #intro { position: fixed; inset: 0; z-index: 10; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; transition: opacity .4s ease; }
   #intro.out { opacity: 0; }
-  .px-heart { position: absolute; left: 50%; top: calc(43% - 96px); width: 63px; height: 56px; transform: translateX(-50%); }
+  .px-couple, .px-photo { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; }
+  .px-couple.hop { animation: pxHop .55s steps(1) 1; }
+  @keyframes pxHop { 0% { transform: translateY(0); } 18% { transform: translateY(-8px); } 36% { transform: translateY(-13px); } 54% { transform: translateY(-8px); } 72% { transform: translateY(0); } 86% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+  .px-photo { opacity: 0; } .px-photo.on { opacity: 1; }
+  .px-heart { position: absolute; width: 42px; height: 37px; }
   .px-heart rect { opacity: 0; }
-  .px.go .px-heart rect { animation: pxOn .01s steps(1) forwards; }
-  .px.go .px-heart { animation: pxBeat .9s steps(1) 1s 2; }
+  .px.heart .px-heart rect { animation: pxOn .01s steps(1) forwards; }
+  .px.heart .px-heart { animation: pxBeat .9s steps(1) .55s 2; }
   @keyframes pxOn { to { opacity: 1; } }
   @keyframes pxOff { to { opacity: 0; } }
-  @keyframes pxBeat { 0% { transform: translateX(-50%) scale(1); } 15% { transform: translateX(-50%) scale(1.14); } 30% { transform: translateX(-50%) scale(1); } 45% { transform: translateX(-50%) scale(1.08); } 60% { transform: translateX(-50%) scale(1); } }
-  .px-type { position: absolute; left: 50%; top: 43%; margin: 0; transform: translate(-50%, -50%); white-space: nowrap;
+  @keyframes pxBeat { 0% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } 60% { transform: scale(1); } }
+  .px-type { position: absolute; left: 50%; top: 30%; margin: 0; transform: translate(-50%, -50%); white-space: nowrap;
              font: 400 clamp(15px, 5.1vw, 22px)/1.6 'Press Start 2P', monospace; letter-spacing: .04em; color: #2b2622; text-shadow: 2px 2px 0 #e9cbbd; }
-  .px-type.pdate { top: 51%; font-size: clamp(12px, 3.9vw, 16px); }
+  .px-type.pdate { top: 72%; font-size: clamp(12px, 3.9vw, 16px); }
   .px-cursor { display: inline-block; width: .7em; height: 1em; margin-left: .15em; vertical-align: -.12em; background: #2b2622; box-shadow: 2px 2px 0 #e9cbbd; animation: pxBlink .7s steps(1) infinite; }
   .px-cursor[hidden] { display: none; }
   @keyframes pxBlink { 50% { opacity: 0; } }
@@ -547,44 +552,63 @@
   }
   tick();
 
-  // ── Save the Date 픽셀 아트 인트로 ──
-  // 1) 8비트 하트가 픽셀 하나씩 채워지며 두근  2) 레트로 글꼴로 'SAVE THE DATE', 이어서 '2027.04.11'을 타자
-  // 3) 하트와 SAVE THE DATE는 픽셀로 부서지고, 날짜는 모자이크에서 점점 선명해져 표지 서체가 됨
-  // 4) 선명해진 날짜가 표지 날짜 자리로 내려가 그대로 표지 날짜가 된다. 누르거나 스크롤하면 바로 표지로.
+  // ── Save the Date + 픽셀 신랑신부 인트로 ──
+  // 표지와 같은 배치: 위 'SAVE THE DATE'(표지 이름 자리) / 가운데 픽셀 신랑신부(표지 인형 자리) / 아래 '2027.04.11'(표지 날짜 자리)
+  // 1) 픽셀 인형이 한 칸씩 채워지고 폴짝, 머리 위로 8비트 하트  2) SAVE THE DATE, 이어서 날짜를 타자
+  // 3) 픽셀 인형 → 모자이크가 선명해지며 진짜 인형 사진 / SAVE THE DATE → 이름 / 날짜 → 크게 선명해진 뒤 날짜 줄로
+  // 누르거나 스크롤하면 바로 표지로.
   (function () {
     const root = document.documentElement;
     if (!root.classList.contains('intro-active')) return;
-    const target = document.querySelector('.cover .date .d1');
+    const cover = document.querySelector('.cover'), h1 = cover.querySelector('.names'), photo = cover.querySelector('img.couple'), target = cover.querySelector('.date .d1');
+    const SP = {"w":48,"h":52,"pal":["#d5813e","#f3e6d7","#241a18","#6b5f5d","#fec096","#332c2b","#8e3c18","#17af0b","#9a8f93","#fd51a2","#d0c6b5","#e4d7cb","#714331","#f8da28","#84c550","#4f4440","#0c0706","#fef8ed","#a1522c","#f5a478","#887b7d","#d61b4e","#46342c","#34221c","#804034","#ec968c"],"data":"........mm6iiiimm......................................m666666iiimm...................................miii66666i666m.............mmmm.mm.............m6ii6i66666666m..........mmm0000m99mmm.........m66iii6666i66666m........m00000000j9999m........m66ii6ii666i6666m.......m0000000000j9999m.......m66666i666666666m.......m000000000000l99m.......m66666666666666m.......m00000000000000l99m......m66666666cccccim.......m0ic000000000cil99m......m666666cjcnc4nm........m6icj000000000il9m.......m6666cc44cccjjm........min4cic0000000im9m........m62cj44p44oom..........mc4cnc00000000mm..........m2ccjjjjjcm...........mjoo4p4000000m.............mg2jjjjjf5m...........mccjj4j0000cm...........mm5g23f33ff2fmm..........mjjjjjciimm..........mm52g22ff3fff2255m.......mmm44444jmm...........m5222255333h335f555m.....mjj4bbbb14jjmm.........m2ff2f33f1hhh3ff522m....mjj444414444444m........m232g3ff53hhh3ff3225m..mj44444444444444m.......m55f2g3555f1hhff33255m..mjj11111111b4j444m......m5f52gf525fbh1ff55g52m..m4jbb1111b1hhj444m......m2f2gg5525fbba3552g52m.mj4jbbbbbb1bb13c44m......m2f2gg5525fbbb3555g225mmj4j411ba11111bj444m.....m2f2gg5525fbaba555g252mm44jmbbbbbbbb1aj444m.....m552gg55253bbbb355gg52mm44jm111111111amj44m....m5f222g5f23babaaf552g52mj44ma1hhhhhh1baaj41m....m2f2g2g5f5fbbbbba552g52mj4jmbhhhhhhh17edj41m....m2f2g2g5553bbbbbb352g52544ja1hhhhhhhbdddd74m....m2f2g2g553bbb11bbf52g22c44mb1hhhhhh1ddddd5jm....mcccmgg553ab111ba322mcjj44mb1hhhhh1addddd7em....m444cg2553kkkkkk8fg2cjj4j4jbhhhhhha70dddc77emm..444jjg255k8kkkkk83g2ccm404jbhhhhh1b999c7777777m.44mmjm25388k33k883m2mmm404j1hhbhh149999f13e777m.m4m.m.mk8883m3k88fmm...mmma1hbb1hh999c911hhf7m...m....mk88km.mk88fm......m1hbb1bhhb999b1111f77m.......mk88km.mk88km.....ma1bbb11hh1493f1hh1777m.......m888fm.mk88km.....mb1bbb11hh1bae7a1b499f7m.....mk8883m.m388km.....m1bbb1b1hhh1ba777f999977.....mk88k3m.m388km....ma1bbbb11hhhhbbaa7999cc7m.....mf88km..m388km....mbaabbb11hhhh1bbbaj9cc977.....mf88km..m388km...mabaabbbb1hhhhh11bbbjfkm77.....mk88km..m3k8km...maaabbb1bbhhhhhh11b11e7mmm.....m8883m..m3k8km...maaaabb1bbhhhhhhhh1111bm.......m8883m..m3k8km..maaabbbb1b1hhhhhhhhhhhh1m.......mf8k3m...m5f5m..maaaabbb1bbhhhhhhhhhhhhh1m.....m5222m...m5g2gfmmaaaaaab11bbhhhhhhhhhhhhhhm.....m52gg5m..m222g2fmf8aaabb11bbhhhhhhhhhhhhhh1m....mf52225m..m2g2252mmaabb11bbbhhhhhhhhhhhhhh1m.....m22522m...mg2222m.mmmmbbbbb1hhhhhhhhhhh1mm.......mg22gm....mmmmm......mmmmm1hhhhhhhh1mmm..........mmmm.....................mmmmmmmmmm......................................................"};   // 인형 사진으로 만든 픽셀 아트 (팔레트 + 칸마다 색 번호, '.' = 투명)
     const NS = 'http://www.w3.org/2000/svg';
     const mg = document.createElement('div');
     mg.id = 'intro'; mg.className = 'px'; mg.setAttribute('aria-hidden', 'true');
-    mg.innerHTML = '<svg class="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges"></svg>'
+    mg.innerHTML = '<canvas class="px-couple"></canvas><canvas class="px-photo"></canvas>'
+                 + '<svg class="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges"></svg>'
                  + '<p class="px-type head"><span class="t"></span><span class="px-cursor"></span></p>'
                  + '<p class="px-type pdate"><span class="t"></span><span class="px-cursor" hidden></span></p>'
                  + '<canvas class="px-mosaic"></canvas><p class="mg-caps"></p>';
     document.body.append(mg);
-    const heart = mg.querySelector('.px-heart'), head = mg.querySelector('.head'), pdate = mg.querySelector('.pdate');
-    const cv = mg.querySelector('.px-mosaic'), caps = mg.querySelector('.mg-caps');
+    const pc = mg.querySelector('.px-couple'), pp = mg.querySelector('.px-photo'), heart = mg.querySelector('.px-heart');
+    const head = mg.querySelector('.head'), pdate = mg.querySelector('.pdate'), cv = mg.querySelector('.px-mosaic'), caps = mg.querySelector('.mg-caps');
     const timers = [], T = (ms, fn) => timers.push(setTimeout(fn, ms));
+    const dpr = Math.min(devicePixelRatio || 1, 3);
 
-    // 8비트 하트 (9x8 칸): 칸마다 나타나는 순서를 무작위로
+    // 8비트 하트
     ['.XX...XX.', 'XXXX.XXXX', 'XXXXXXXXX', 'XXXXXXXXX', '.XXXXXXX.', '..XXXXX..', '...XXX...', '....X....'].forEach((row, y) => [...row].forEach((c, x) => {
       if (c !== 'X') return;
       const r = document.createElementNS(NS, 'rect');
       r.setAttribute('x', x); r.setAttribute('y', y); r.setAttribute('width', 1); r.setAttribute('height', 1);
       r.setAttribute('fill', x === 2 && y === 1 ? '#fbeee6' : x + y >= 10 || y >= 6 ? '#b47660' : '#c99079');
-      r.style.animationDelay = (Math.random() * .75).toFixed(2) + 's';
+      r.style.animationDelay = (Math.random() * .45).toFixed(2) + 's';
       heart.append(r);
     }));
 
-    // 픽셀 별 (5x5 십자) 네 개: 글자 주변
-    [[-150, -46], [150, -40], [-128, 62], [140, 70]].forEach(([dx, dy], k) => {
+    // 표지 요소 위치에 맞춰 배치 (글꼴이 늦게 와서 표지 배치가 바뀔 수 있으니 시작할 때 한 번 더)
+    const rectOf = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); };
+    let P;   // 인형 사진 자리
+    function layout() {
+      P = photo.getBoundingClientRect();
+      Object.assign(pc.style, { left: P.left + 'px', top: P.top + 'px', width: P.width + 'px', height: P.height + 'px' });
+      pc.width = SP.w; pc.height = SP.h;
+      Object.assign(heart.style, { left: P.left + P.width / 2 - 21 + 'px', top: P.top - 34 + 'px' });
+      const n = rectOf(h1), d = rectOf(target.parentElement);
+      head.style.top = n.top + n.height / 2 + 'px';
+      pdate.style.top = d.top + d.height / 2 + 'px';
+    }
+    layout();
+
+    // 픽셀 별 네 개: 인형 주변
+    const sparkAt = [[-.12, .08], [1.08, .02], [-.06, .78], [1.04, .86]];
+    const sparks = sparkAt.map((_, k) => {
       const sv = document.createElementNS(NS, 'svg');
       sv.setAttribute('viewBox', '0 0 5 5'); sv.setAttribute('shape-rendering', 'crispEdges'); sv.setAttribute('class', 'px-spark');
       sv.innerHTML = '<rect x="2" y="0" width="1" height="5" fill="#d9b47a"/><rect x="0" y="2" width="5" height="1" fill="#d9b47a"/><rect x="2" y="2" width="1" height="1" fill="#fff"/>';
-      sv.style.cssText = `left:calc(50% + ${dx * Math.min(1, innerWidth / 390)}px - 7px);top:calc(47% + ${dy}px);animation-delay:${k * .12}s`;
-      mg.append(sv);
+      sv.style.animationDelay = k * .12 + 's'; mg.append(sv); return sv;
     });
+    const placeSparks = () => sparks.forEach((sv, k) => { sv.style.left = P.left + P.width * sparkAt[k][0] - 7 + 'px'; sv.style.top = P.top + P.height * sparkAt[k][1] - 7 + 'px'; });
 
     // 인트로 중 스크롤/터치/키 입력은 '건너뛰기'로 받는다
     const block = e => { if (!mg.isConnected) return unblock(); e.preventDefault(); skip(); };
@@ -601,32 +625,74 @@
       step();
     };
 
-    function begin() {
-      if (scrollY) scrollTo(0, 0);
-      mg.classList.add('go');                                   // 하트가 픽셀 하나씩 (0~0.75초), 1초부터 두근두근
-      T(900, () => typeInto(head, 'SAVE THE DATE', 70, () => {  // 0.9초부터 SAVE THE DATE
-        T(250, () => {
-          head.querySelector('.px-cursor').hidden = true; pdate.querySelector('.px-cursor').hidden = false;
-          typeInto(pdate, '2027.04.11', 65);                   // 이어서 날짜
-        });
-      }));
-      T(2000, () => mg.classList.add('spark'));                 // 픽셀 별 반짝
-      T(3150, mosaic);
+    // 모자이크 그리기: blk = 칸 크기(CSS px), 0이면 선명하게
+    function mosaicPainter(canvas, src, W, H) {
+      const ctx = canvas.getContext('2d'), tmp = document.createElement('canvas'), tc = tmp.getContext('2d');
+      return blk => {
+        ctx.clearRect(0, 0, W, H);
+        if (!blk) { ctx.imageSmoothingEnabled = true; ctx.drawImage(src, 0, 0, W, H); return; }
+        const b = Math.max(1, Math.round(blk * dpr)), sw = Math.ceil(W / b), sh = Math.ceil(H / b);
+        tmp.width = sw; tmp.height = sh; tc.imageSmoothingEnabled = true; tc.imageSmoothingQuality = 'high';
+        tc.drawImage(src, 0, 0, sw, sh);
+        ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 0, 0, sw * b, sh * b);
+      };
     }
 
-    function mosaic() {
-      mg.classList.add('out1');                                 // SAVE THE DATE는 깜빡이며, 하트는 픽셀 하나씩 사라짐
+    function begin() {
+      if (scrollY) scrollTo(0, 0);
+      layout(); placeSparks();
+      mg.classList.add('go');
+      // 1) 픽셀 인형이 한 칸씩 무작위로 채워짐 (0~0.9초)
+      const ctx = pc.getContext('2d'), cells = [];
+      for (let i = 0; i < SP.data.length; i++) if (SP.data[i] !== '.') cells.push(i);
+      for (let i = cells.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cells[i], cells[j]] = [cells[j], cells[i]]; }
+      const BATCH = 16;
+      for (let b = 0; b < BATCH; b++) T(b * 56, () => {
+        for (let k = Math.floor(cells.length * b / BATCH); k < Math.floor(cells.length * (b + 1) / BATCH); k++) {
+          const i = cells[k]; ctx.fillStyle = SP.pal[parseInt(SP.data[i], 36)]; ctx.fillRect(i % SP.w, Math.floor(i / SP.w), 1, 1);
+        }
+      });
+      T(950, () => { pc.classList.add('hop'); mg.classList.add('heart'); });   // 폴짝 + 하트
+      // 2) SAVE THE DATE → 날짜
+      T(1250, () => typeInto(head, 'SAVE THE DATE', 70, () => T(250, () => {
+        head.querySelector('.px-cursor').hidden = true; pdate.querySelector('.px-cursor').hidden = false;
+        typeInto(pdate, '2027.04.11', 65);
+      })));
+      T(2350, () => mg.classList.add('spark'));
+      T(3500, transform);
+    }
+
+    function transform() {
+      mg.classList.add('out1');
       heart.querySelectorAll('rect').forEach(r => T(Math.random() * 450, () => { r.style.animation = 'none'; r.style.opacity = '0'; }));
-      // 표지 날짜와 같은 글꼴로 날짜를 준비 (픽셀 날짜가 있던 자리에, 크게)
+      // 픽셀 인형 → 진짜 인형 사진 (모자이크가 점점 선명해짐). 교체 직전 위치를 다시 잰다
+      layout();
+      const W = Math.ceil(P.width * dpr), H = Math.ceil(P.height * dpr);
+      pp.width = W; pp.height = H;
+      Object.assign(pp.style, { left: P.left + 'px', top: P.top + 'px', width: P.width + 'px', height: P.height + 'px' });
+      const paintPhoto = mosaicPainter(pp, photo, W, H), cell = P.width / SP.w;
+      [cell, cell * .75, cell * .5, cell * .3, 0].forEach((blk, k) => T(k * 150, () => {
+        paintPhoto(blk);
+        if (k === 0) { pp.classList.add('on'); pc.style.visibility = 'hidden'; }
+        if (blk === 0) T(120, () => {                                // 진짜 인형 사진으로 교체
+          const pic = photo.parentElement; pic.style.transition = 'none';
+          root.classList.remove('intro-hold-couple'); pp.classList.remove('on');
+          requestAnimationFrame(() => requestAnimationFrame(() => { pic.style.transition = ''; }));
+        });
+      }));
+      dateMosaic();
+    }
+
+    function dateMosaic() {
+      // 표지 날짜와 같은 글꼴로 날짜 준비 (픽셀 날짜가 있던 자리에, 크게)
       const cs = getComputedStyle(target), ps = getComputedStyle(target.parentElement);
       Object.assign(caps.style, { fontFamily: cs.fontFamily, fontSize: cs.fontSize, fontWeight: cs.fontWeight, letterSpacing: cs.letterSpacing, lineHeight: ps.lineHeight });
       caps.textContent = '2027.04.11';
-      const w = caps.offsetWidth, h = caps.offsetHeight, S = Math.min(2.2, innerWidth * .7 / w);
+      const w = caps.offsetWidth, h = caps.offsetHeight, S = Math.min(1.9, innerWidth * .62 / w);
       const pr = pdate.getBoundingClientRect();
       const x0 = innerWidth / 2 - w * S / 2, y0 = pr.top + pr.height / 2 - h * S / 2;
       caps.style.transform = `translate(${x0}px, ${y0}px) scale(${S})`;
-      // 선명한 날짜를 캔버스에 그려 두고, 칸 크기를 줄여 가며 모자이크로 보여 준다
-      const dpr = Math.min(devicePixelRatio || 1, 3), W = Math.ceil(w * S * dpr), H = Math.ceil(h * S * dpr);
+      const W = Math.ceil(w * S * dpr), H = Math.ceil(h * S * dpr);
       const src = document.createElement('canvas'); src.width = W; src.height = H;
       const sc = src.getContext('2d');
       sc.font = `${cs.fontWeight} ${parseFloat(cs.fontSize) * S * dpr}px ${cs.fontFamily}`; sc.fillStyle = '#2b2622'; sc.textBaseline = 'middle';
@@ -634,48 +700,37 @@
       sc.fillText('2027.04.11', 0, H / 2);
       cv.width = W; cv.height = H;
       Object.assign(cv.style, { left: x0 + 'px', top: y0 + 'px', width: w * S + 'px', height: h * S + 'px' });
-      const ctx = cv.getContext('2d'), tmp = document.createElement('canvas'), tc = tmp.getContext('2d');
-      const draw = blk => {
-        ctx.clearRect(0, 0, W, H);
-        if (!blk) { ctx.imageSmoothingEnabled = true; ctx.drawImage(src, 0, 0); return; }
-        const b = Math.max(1, Math.round(blk * dpr)), sw = Math.ceil(W / b), sh = Math.ceil(H / b);
-        tmp.width = sw; tmp.height = sh; tc.imageSmoothingEnabled = true; tc.imageSmoothingQuality = 'high';
-        tc.drawImage(src, 0, 0, sw, sh);
-        ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 0, 0, sw * b, sh * b);
-      };
-      const steps = [14, 10, 7, 5, 3, 2, 0];
-      steps.forEach((blk, k) => T(200 + k * 140, () => {
-        draw(blk);
-        if (k === 0) { cv.classList.add('on'); pdate.style.visibility = 'hidden'; }   // 픽셀 날짜 → 모자이크 날짜
-      }));
+      const paint = mosaicPainter(cv, src, W, H), steps = [12, 9, 6, 4, 3, 2, 0];
+      steps.forEach((blk, k) => T(200 + k * 140, () => { paint(blk); if (k === 0) { cv.classList.add('on'); pdate.style.visibility = 'hidden'; } }));
       const done = 200 + steps.length * 140;
-      T(done + 150, () => { caps.classList.add('on'); cv.classList.remove('on'); });   // 캔버스 → 진짜 글자로 살짝 겹쳐 바꿈
+      T(done + 150, () => { caps.classList.add('on'); cv.classList.remove('on'); });
       T(done + 450, flip);
     }
 
-    function flip() {                                           // 표지 날짜 자리로 내려가며 원래 크기로
-      const r = document.createRange(); r.selectNodeContents(target);
-      const t = r.getBoundingClientRect(), w = caps.offsetWidth, h = caps.offsetHeight;
+    function flip() {                                               // 날짜를 표지 날짜 자리로
+      const t = rectOf(target), w = caps.offsetWidth, h = caps.offsetHeight;
       caps.style.transition = 'opacity .25s ease, transform 1s cubic-bezier(.65, 0, .35, 1)';
       caps.style.transform = `translate(${t.left + (t.width - w) / 2}px, ${t.top + (t.height - h) / 2}px)`;
-      T(400, () => root.classList.remove('intro-active'));     // 이름, 인형, 예식장 등 표지 나머지가 차례로 나타남
-      T(1150, handoff);                                         // 이동(1초)이 완전히 끝난 뒤 교체
+      T(300, () => root.classList.remove('intro-active'));         // 이름, 예식장 등 표지 나머지가 차례로
+      T(1150, handoff);
     }
 
-    function handoff() {                                        // 진짜 표지 날짜로 교체 (위치/크기/글꼴이 같아 이어 보인다)
-      root.classList.remove('intro-hold');
+    function handoff() {
+      root.classList.remove('intro-hold', 'intro-hold-couple');
       mg.remove(); unblock();
     }
 
     function skip() {
       timers.forEach(clearTimeout);
-      root.classList.remove('intro-active', 'intro-hold');
+      root.classList.remove('intro-active', 'intro-hold', 'intro-hold-couple');
       mg.classList.add('out'); unblock();
       setTimeout(() => mg.remove(), 400);
     }
 
-    const fonts = document.fonts ? Promise.all([document.fonts.load("16px 'Press Start 2P'"), document.fonts.load('30px Cinzel')]) : Promise.resolve();
-    Promise.race([fonts, new Promise(r => setTimeout(r, 2500))]).then(begin, begin);
+    // 표지 배치가 인트로 도중에 바뀌지 않도록 표지에 쓰는 글꼴을 모두 기다린다
+    const fonts = document.fonts ? Promise.all(["16px 'Press Start 2P'", '30px Cinzel', '34px Sacramento', "15px 'Gowun Batang'", "bold 15px 'Gowun Batang'"].map(f => document.fonts.load(f))) : Promise.resolve();
+    const img = photo.complete ? Promise.resolve() : new Promise(r => { photo.addEventListener('load', r, { once: true }); photo.addEventListener('error', r, { once: true }); });
+    Promise.race([Promise.all([fonts, img]), new Promise(r => setTimeout(r, 2500))]).then(begin, begin);
   })();
 </script>
 </body>
