@@ -89,15 +89,6 @@
   .ways h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
   .ways p { font-size: 13.5px; line-height: 1.75; }
 
-  /* 연락하기 */
-  .people { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
-  .side { padding: 20px 8px 18px; background: rgba(255, 255, 255, .6); border: 1px solid rgba(150, 125, 90, .14); border-radius: 10px; }
-  .side h3 { font-size: 13px; font-weight: 400; letter-spacing: .12em; color: #8a8a8a; }
-  .side p { margin: 8px 0 14px; font-size: 16px; }
-  .side p span { font-size: 13px; color: #777; margin-right: 4px; }
-  .call { display: flex; gap: 6px; justify-content: center; }
-  .call a { flex: 1; max-width: 64px; padding: 8px 0; border: 1px solid #d8cdb9; border-radius: 999px; background: rgba(255, 255, 255, .7); font: 700 13px 'Gowun Batang', serif; color: #2b2622; text-decoration: none; }
-
   /* 달력 */
   .calendar { padding-bottom: 20px; }
   .cal { max-width: 300px; margin: 28px auto 0; }
@@ -245,23 +236,6 @@
     </div>
   </section>
 
-  <section class="contact">
-    <h2>CONTACT</h2>
-    <p class="sub">연락하기</p>
-    <div class="people">
-      <div class="side">
-        <h3>신랑측</h3>
-        <p><span>신랑</span>이재홍</p>
-        <div class="call"><a href="tel:01099259614" aria-label="신랑 이재홍에게 전화">전화</a><a href="sms:01099259614" aria-label="신랑 이재홍에게 문자">문자</a></div>
-      </div>
-      <div class="side">
-        <h3>신부측</h3>
-        <p><span>신부</span>이지나</p>
-        <div class="call"><a href="tel:01073745935" aria-label="신부 이지나에게 전화">전화</a><a href="sms:01073745935" aria-label="신부 이지나에게 문자">문자</a></div>
-      </div>
-    </div>
-  </section>
-
   <section class="calendar">
     <h2>CALENDAR</h2>
     <p class="sub">2027년 4월 11일 일요일 오전 11시</p>
@@ -377,7 +351,7 @@
 
 <script>
   // ── 스크롤 효과 ── 화면 안(위아래 6% 여백 제외)에 들어오면 나타나고, 벗어나면 사라진다
-  const groups = '.greeting, .parents, .grid, .people, .timer, .ways';          // 이 묶음들은 한 줄/한 칸씩 차례로
+  const groups = '.greeting, .parents, .grid, .timer, .ways';          // 이 묶음들은 한 줄/한 칸씩 차례로
   const targets = [];
   document.querySelectorAll('main section > *, main > footer').forEach(el => {
     const items = el.matches(groups) ? [...el.children] : [el];
